@@ -15,6 +15,12 @@ Clone:
 git clone APDC-2025-Individual-65471
 cd <project-folder>
 
+mvn clean install
+
+gcloud auth login
+
+gcloud config set project individual-456011
+
 Build:
 mvn clean package
 
@@ -23,3 +29,5 @@ mvn appengine:run
 
 Deploy Remoto:
 mvn package appengine:deploy -Dapp.deploy.projectId=individual-456011 -Dapp.deploy.version=1
+
+

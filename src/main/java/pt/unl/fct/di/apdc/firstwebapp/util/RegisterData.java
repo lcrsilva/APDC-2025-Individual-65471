@@ -9,16 +9,16 @@ public class RegisterData {
 	public String phone;
 	public String profile;
 
-	// Optional attributes
+
 	public String citizenCard;
-	public String role = "ENDUSER"; // default value
+	public String role = "ENDUSER";
 	public String nif;
 	public String employer;
 	public String job;
 	public String address;
 	public String employerNif;
-	public String state = "DEACTIVATED"; // default value
-	public String photo; // base64 encoded jpeg, optional
+	public String state = "DEACTIVATED";
+	public String photo;
 
 	public RegisterData() {}
 

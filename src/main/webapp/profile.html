@@ -229,35 +229,35 @@
  const userRoleDisplay = document.getElementById("userRole");
  const changeRoleSection = document.getElementById("changeRoleSection");
  const changeStateSection = document.getElementById("changeStateSection");
- const removeUserSection = document.getElementById("removeUserSection"); // Fixed this
+ const removeUserSection = document.getElementById("removeUserSection");
  const roleSelect = document.getElementById("newRole");
  const stateSelect = document.getElementById("newState");
  const otherStateInput = document.getElementById("otherStateInput");
  const otherStateInputField = document.getElementById("otherState");
 
- // Check if authToken exists
+
  if (!authToken) {
      window.location.href = "login.html";
  } else {
      usernameDisplay.textContent = authToken.username;
      userRoleDisplay.textContent = authToken.role;
 
-     // Only Admins and Backoffice can see these sections
+
      if (authToken.role === "BACKOFFICE" || authToken.role === "ADMIN") {
          changeRoleSection.style.display = "block";
          changeStateSection.style.display = "block";
-         removeUserSection.style.display = "block"; // Added this
+         removeUserSection.style.display = "block";
          fetchAvailableRoles();
          fetchAvailableStates();
      } else {
-         // Hide the sections for Endusers
+
          changeRoleSection.style.display = "none";
          changeStateSection.style.display = "none";
-         removeUserSection.style.display = "none"; // Hide remove section for non-privileged users
+         removeUserSection.style.display = "none";
      }
  }
 
- // List users function
+
  async function listUsers() {
      const response = await fetch("rest/user/list", {
          method: "POST",
@@ -305,7 +305,7 @@
      }
  }
 
- // Remove user function
+
  const removeUserForm = document.getElementById("removeUserForm");
  const removeUserMessage = document.getElementById("messageRemoveUser");
 
@@ -341,7 +341,7 @@
      }
  });
 
- // Fetch available roles for the user based on their role
+
  async function fetchAvailableRoles() {
      const response = await fetch("rest/user/availableRoles", {
          method: "POST",
@@ -353,11 +353,11 @@
 
      if (response.ok) {
          const roles = await response.json();
-         roleSelect.innerHTML = ""; // Clear current options
+         roleSelect.innerHTML = "";
 
-         // Add role options based on the logged-in user's role
+
          if (authToken.role === "ADMIN") {
-             // Admin can assign all roles
+
              roles.forEach(role => {
                  const option = document.createElement("option");
                  option.value = role;
@@ -365,8 +365,8 @@
                  roleSelect.appendChild(option);
              });
          } else if (authToken.role === "BACKOFFICE") {
-             // Backoffice can only assign specific roles
-             const allowedRoles = ["ENDUSER", "PARTNER"]; // List allowed roles for Backoffice
+
+             const allowedRoles = ["ENDUSER", "PARTNER"];
              roles.forEach(role => {
                  if (allowedRoles.includes(role)) {
                      const option = document.createElement("option");
@@ -381,7 +381,7 @@
      }
  }
 
- // Fetch available states for the user based on their role
+
  async function fetchAvailableStates() {
      const response = await fetch("rest/user/availableStates", {
          method: "POST",
@@ -393,25 +393,25 @@
 
      if (response.ok) {
          const states = await response.json();
-         stateSelect.innerHTML = ""; // Clear current options
+         stateSelect.innerHTML = "";
 
-         // Add state options based on the logged-in user's role
+
          if (authToken.role === "ADMIN") {
-             // Admin can assign all states
+
              states.forEach(state => {
                  const option = document.createElement("option");
                  option.value = state;
                  option.textContent = state;
                  stateSelect.appendChild(option);
              });
-             // Add "Other" option
+
              const otherOption = document.createElement("option");
              otherOption.value = "Other";
              otherOption.textContent = "Other";
              stateSelect.appendChild(otherOption);
          } else if (authToken.role === "BACKOFFICE") {
-             // Backoffice can only assign specific states
-             const allowedStates = ["ACTIVATED", "DEACTIVATED"]; // List allowed states for Backoffice
+
+             const allowedStates = ["ACTIVATED", "DEACTIVATED"];
              states.forEach(state => {
                  if (allowedStates.includes(state)) {
                      const option = document.createElement("option");
@@ -426,7 +426,7 @@
      }
  }
 
- // Show or hide the 'Other' input field
+
  stateSelect.addEventListener("change", function() {
      if (stateSelect.value === "Other") {
          otherStateInput.style.display = "block";
@@ -435,15 +435,15 @@
      }
  });
 
- // Logout function
-// Function that handles the logout request
+
+
 function logout() {
     const authToken = JSON.parse(sessionStorage.getItem("authToken"));
 
-    // Prepare the data for the request (including the auth token)
+
     const logoutData = { authToken: authToken };
 
-    // Send a POST request to the backend
+
     fetch("rest/user/logout", {
         method: "POST",
         headers: {
@@ -451,13 +451,13 @@ function logout() {
         },
         body: JSON.stringify(logoutData)
     })
-    .then(response => response.json()) // Parse the response as JSON
+    .then(response => response.json())
     .then(data => {
-        // Log the response data to the console
+
         console.log(data);
 
-        // Handle the logout success and redirect
-        alert(data); // or any other logic you want
+
+        alert(data);
         sessionStorage.clear();
         window.location.href = "login.html";
     })
@@ -466,12 +466,12 @@ function logout() {
     });
 }
 
- // Back to home function
+
  function goHome() {
      window.location.href = "home.html";
  }
 
- // Handle state change
+
  const stateForm = document.getElementById("changeStateForm");
  const stateMessage = document.getElementById("messageState");
 
@@ -481,7 +481,7 @@ function logout() {
      const targetUsernameState = document.getElementById("targetUsernameState").value;
      let newState = stateSelect.value;
 
-     // If "Other" is selected, get the value from the custom input field
+
      if (newState === "Other") {
          newState = otherStateInputField.value;
      }
@@ -512,13 +512,13 @@ function logout() {
          stateMessage.textContent = "Error: " + error;
      }
  });
-    // Change account attributes functionality
+
 const changeAttributesForm = document.getElementById("changeAttributesForm");
 const messageAttributes = document.getElementById("messageAttributes");
 const targetUsernameContainer = document.getElementById("targetUsernameContainer");
 const emailContainer = document.getElementById("emailContainer");
 
-// Show/hide fields based on user role
+
 if (authToken.role === "ADMIN" || authToken.role === "BACKOFFICE") {
     targetUsernameContainer.style.display = "block";
 }
@@ -547,7 +547,7 @@ changeAttributesForm.addEventListener("submit", async (e) => {
         profile: newProfile || null
     };
     if (authToken.role === "ENDUSER") {
-    // Hide name field for ENDUSERs
+
     document.getElementById("newName").parentElement.style.display = "none";
 }
 
@@ -568,7 +568,7 @@ changeAttributesForm.addEventListener("submit", async (e) => {
         messageAttributes.textContent = "Error: " + error;
     }
 });
-    // Change password functionality
+
 const changePasswordForm = document.getElementById("changePasswordForm");
 const messagePassword = document.getElementById("messagePassword");
 
@@ -579,7 +579,7 @@ changePasswordForm.addEventListener("submit", async (e) => {
     const newPassword = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
 
-    // Client-side validation
+
     if (newPassword !== confirmPassword) {
         messagePassword.style.color = "red";
         messagePassword.textContent = "New password and confirmation do not match.";
@@ -613,7 +613,7 @@ changePasswordForm.addEventListener("submit", async (e) => {
     if (response.ok) {
         messagePassword.style.color = "green";
         messagePassword.textContent = "Password changed successfully!";
-        // Clear the form
+
         changePasswordForm.reset();
     } else {
         const error = await response.text();

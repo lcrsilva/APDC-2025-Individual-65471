@@ -51,11 +51,11 @@
 
 
 <script>
-    // Replace this with actual login info from localStorage/sessionStorage
+
     const authToken = JSON.parse(sessionStorage.getItem("authToken"));
 
     if (!authToken) {
-        // Redirect to login if not logged in
+
         window.location.href = "login.html";
     } else {
         document.getElementById("usernameDisplay").textContent = authToken.username;
@@ -65,18 +65,18 @@
         window.location.href = "profile.html";
     }
         function goToCreateWorksheet() {
-        window.location.href = "create_worksheet.html"; // 🌟 New redirect
+        window.location.href = "create_worksheet.html";
     }
 
 
-// Function that handles the logout request
+
 function logout() {
     const authToken = JSON.parse(sessionStorage.getItem("authToken"));
 
-    // Prepare the data for the request (including the auth token)
+
     const logoutData = { authToken: authToken };
 
-    // Send a POST request to the backend
+
     fetch("rest/user/logout", {
         method: "POST",
         headers: {
@@ -84,13 +84,13 @@ function logout() {
         },
         body: JSON.stringify(logoutData)
     })
-    .then(response => response.json()) // Parse the response as JSON
+    .then(response => response.json())
     .then(data => {
-        // Log the response data to the console
+
         console.log(data);
 
-        // Handle the logout success and redirect
-        alert(data); // or any other logic you want
+
+        alert(data);
         sessionStorage.clear();
         window.location.href = "login.html";
     })

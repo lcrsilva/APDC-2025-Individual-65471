@@ -37,7 +37,7 @@ public class MediaResource {
 			@Override
 			public void write(OutputStream output) throws IOException {
 
-				// Download object to the output stream. See Google's documentation.
+
 				blob.downloadTo(output);
 				output.flush();
 			}
@@ -67,12 +67,12 @@ public class MediaResource {
 			@HeaderParam("Content-Type") String contentType,
 			@Context HttpServletRequest request) {
 
-		// Upload to Google Cloud Storage (see Google's documentation)
+
 		Storage storage = StorageOptions.getDefaultInstance().getService();
 		BlobId blobId = BlobId.of(bucket, object);
 		BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build();
-		// The following is deprecated since it is better to upload directly to GCS from
-		// the client
+
+
 		try {
 			storage.create(blobInfo, request.getInputStream());
 			return Response.ok().build();

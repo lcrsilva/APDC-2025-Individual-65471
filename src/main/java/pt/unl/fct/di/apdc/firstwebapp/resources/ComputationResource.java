@@ -32,7 +32,7 @@ public class ComputationResource {
 
 	private static final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 
-	public ComputationResource() {} //nothing to be done here @GET
+	public ComputationResource() {} nothing to be done here @GET
 
 	@GET
 	@Path("/hello")
@@ -79,11 +79,11 @@ public class ComputationResource {
 	public Response executeComputeTask() {
 		LOG.fine("Starting to execute computation tasks");
 		try {
-			Thread.sleep(60*1000*10); //10 min...
+			Thread.sleep(60*1000*10);
 		} catch(Exception e) {
 			LOG.logp(Level.SEVERE,  this.getClass().getCanonicalName(), "executeComputeTask", "An exception has occured");
 			return Response.serverError().build();
-		} //Simulates 60s execution
+		}
 		return Response.ok().build();
 	}
 	

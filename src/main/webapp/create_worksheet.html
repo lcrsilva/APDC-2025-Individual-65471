@@ -137,7 +137,7 @@ const worksheetData = {
     status: document.getElementById("status").value
 };
 
-// If AWARDED, add extra fields
+
 if (worksheetData.status === "AWARDED") {
     worksheetData.awardDate = document.getElementById("awardDate").value;
     worksheetData.startDate = document.getElementById("startDate").value;
@@ -160,7 +160,7 @@ if (worksheetData.status === "AWARDED") {
 }).then(response => {
     if (response.ok) {
         alert("Worksheet created successfully!");
-        window.location.href = "home.html"; // Redirect if you want
+        window.location.href = "home.html";
     } else {
         response.text().then(text => {
             alert("Error: " + text);

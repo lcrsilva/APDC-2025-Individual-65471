@@ -22,17 +22,17 @@ public class WorksheetResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createWorksheet(WorksheetData data) {
-        // Validate if the required fields are present
+
         if (data == null || data.authToken == null || !data.isValid()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or invalid data.").build();
         }
 
-        // Validate AWARDED fields if the status is "AWARDED"
+
         if (!data.isAwardedValid()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or invalid awarded fields.").build();
         }
 
-        // Verify token is in AuthToken kind
+
         Key tokenKey = datastore.newKeyFactory().setKind("AuthToken").newKey(data.authToken.tokenID);
         Entity tokenEntity = datastore.get(tokenKey);
 
@@ -40,17 +40,17 @@ public class WorksheetResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid or expired token.").build();
         }
 
-        // Only certain roles can create worksheets (e.g., ADMIN or BACKOFFICE)
+
         String role = data.authToken.role;
         if (!(role.equals("ADMIN") || role.equals("BACKOFFICE"))) {
             return Response.status(Response.Status.FORBIDDEN).entity("You don't have permission to create worksheets.").build();
         }
 
-        // Create new worksheet entity
+
         KeyFactory worksheetKeyFactory = datastore.newKeyFactory().setKind("Worksheet");
         Key worksheetKey = datastore.allocateId(worksheetKeyFactory.newKey());
 
-        // Build the worksheet entity with all attributes (including awarded fields)
+
         Entity.Builder worksheetEntityBuilder = Entity.newBuilder(worksheetKey)
                 .set("reference", data.reference)
                 .set("description", data.description)
@@ -59,7 +59,7 @@ public class WorksheetResource {
                 .set("createdBy", data.authToken.username)
                 .set("timestamp", Timestamp.now());
 
-        // Add awarded fields if the status is "AWARDED"
+
         if ("AWARDED".equals(data.status)) {
             worksheetEntityBuilder
                     .set("awardDate", data.awardDate)
@@ -72,7 +72,7 @@ public class WorksheetResource {
                     .set("observations", data.observations);
         }
 
-        // Save worksheet to Datastore
+
         datastore.put(worksheetEntityBuilder.build());
 
         LOG.info("Worksheet created by " + data.authToken.username);

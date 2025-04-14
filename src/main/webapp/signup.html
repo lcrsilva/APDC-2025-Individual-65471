@@ -115,9 +115,9 @@
             message.style.color = "green";
             message.textContent = "Utilizador registado com sucesso! 🎉 A redirecionar para login...";
 
-            // Wait 2 seconds and redirect to login page
+
             setTimeout(() => {
-                window.location.href = "login.html"; // Change this if your login is in another path
+                window.location.href = "login.html";
             }, 2000);
         } else {
             const error = await response.text();

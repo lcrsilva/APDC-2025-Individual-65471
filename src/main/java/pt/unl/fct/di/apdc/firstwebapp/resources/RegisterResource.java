@@ -33,7 +33,7 @@ public class RegisterResource {
 
 
 	public RegisterResource() {
-	}    // Default constructor, nothing to do
+	}
 
 	@POST
 	@Path("/v1")
@@ -73,8 +73,8 @@ public class RegisterResource {
 				.set("user_creation_time", Timestamp.now())
 				.build();
 
-		// Concurrency problem...
-		// When we reach here, another client might have put() an entity with the same key...
+
+
 
 		datastore.put(user);
 		LOG.info("User registered " + data.username);
@@ -98,16 +98,16 @@ public class RegisterResource {
 			Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
 			Entity user = txn.get(userKey);
 
-			// If the entity does not exist null is returned...
+
 			if (user != null) {
 				txn.rollback();
 				return Response.status(Status.CONFLICT).entity("User already exists.").build();
 			} else {
-				// ... otherwise
+
 				user = Entity.newBuilder(userKey).set("user_name", data.name)
 						.set("user_pwd", DigestUtils.sha512Hex(data.password)).set("user_email", data.email)
 						.set("user_creation_time", Timestamp.now()).build();
-				// get() followed by put() inside a transaction is ok...
+
 				txn.put(user);
 				txn.commit();
 				LOG.info("User registered " + data.username);
@@ -150,14 +150,14 @@ public class RegisterResource {
 					.set("user_state", data.state)
 					.set("user_creation_time", Timestamp.now());
 
-			// Optional fields
+
 			if (data.citizenCard != null) userBuilder.set("user_cc", data.citizenCard);
 			if (data.nif != null) userBuilder.set("user_nif", data.nif);
 			if (data.employer != null) userBuilder.set("user_employer", data.employer);
 			if (data.job != null) userBuilder.set("user_job", data.job);
 			if (data.address != null) userBuilder.set("user_address", data.address);
 			if (data.employerNif != null) userBuilder.set("user_employer_nif", data.employerNif);
-			if (data.photo != null) userBuilder.set("user_photo", data.photo); // base64
+			if (data.photo != null) userBuilder.set("user_photo", data.photo);
 
 			datastore.put(userBuilder.build());
 			LOG.info("User registered successfully: " + data.username);

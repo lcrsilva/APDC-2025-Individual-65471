@@ -85,7 +85,7 @@ public class LoginResource {
         String role = user.getString("user_role");
         AuthToken token = new AuthToken(data.username, role);
 
-        // Store the token in Datastore
+
         KeyFactory tokenKeyFactory = datastore.newKeyFactory().setKind("AuthToken");
         Key tokenKey = tokenKeyFactory.newKey(token.tokenID);
         Entity tokenEntity = Entity.newBuilder(tokenKey)
@@ -115,7 +115,7 @@ public class LoginResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Missing token.").build();
             }
 
-            // Remove the token from Datastore
+
             Key tokenKey = datastore.newKeyFactory().setKind("AuthToken").newKey(token.tokenID);
             datastore.delete(tokenKey);
 
@@ -134,7 +134,7 @@ public class LoginResource {
         Entity user = datastore.get(userKey);
         if (user != null && user.getString(USER_PWD).equals(DigestUtils.sha512Hex(data.password))) {
 
-            // Get the date of yesterday
+
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, -1);
             Timestamp yesterday = Timestamp.of(cal.getTime());
@@ -171,7 +171,7 @@ public class LoginResource {
 
         int next;
 
-        // Checking for valid request parameter values
+
         try {
             next = Integer.parseInt(nextParam);
             if (next < 0)
@@ -185,7 +185,7 @@ public class LoginResource {
         Entity user = datastore.get(userKey);
         if (user != null && user.getString(USER_PWD).equals(DigestUtils.sha512Hex(data.password))) {
 
-            // Get the date of yesterday
+
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, -1);
             Timestamp yesterday = Timestamp.of(cal.getTime());

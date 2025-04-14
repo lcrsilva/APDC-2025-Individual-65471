@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 40px;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #1565C0;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Welcome, <span id="usernameDisplay"></span>!</h1>
+</div>
+<div class="container">
+    <button onclick="goToProfile()">Profile Settings</button>
+    <button onclick="goToCreateWorksheet()">Create Worksheet</button> <!-- 🌟 New Button -->
+    <button onclick="logout()">Logout</button>
+</div>
+
+
+
+<script>
+    // Replace this with actual login info from localStorage/sessionStorage
+    const authToken = JSON.parse(sessionStorage.getItem("authToken"));
+
+    if (!authToken) {
+        // Redirect to login if not logged in
+        window.location.href = "login.html";
+    } else {
+        document.getElementById("usernameDisplay").textContent = authToken.username;
+    }
+
+    function goToProfile() {
+        window.location.href = "profile.html";
+    }
+        function goToCreateWorksheet() {
+        window.location.href = "create_worksheet.html"; // 🌟 New redirect
+    }
+
+
+// Function that handles the logout request
+function logout() {
+    const authToken = JSON.parse(sessionStorage.getItem("authToken"));
+
+    // Prepare the data for the request (including the auth token)
+    const logoutData = { authToken: authToken };
+
+    // Send a POST request to the backend
+    fetch("rest/user/logout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(logoutData)
+    })
+    .then(response => response.json()) // Parse the response as JSON
+    .then(data => {
+        // Log the response data to the console
+        console.log(data);
+
+        // Handle the logout success and redirect
+        alert(data); // or any other logic you want
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    })
+    .catch(error => {
+        console.error("Error during logout:", error);
+    });
+}
+</script>
+</body>
+</html>
